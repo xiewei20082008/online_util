@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>APR Earnings Calculator</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7f4;
+        --panel: #ffffff;
+        --ink: #18201b;
+        --muted: #5e6a63;
+        --line: #d9ded7;
+        --accent: #176b52;
+        --accent-soft: #e3f2ec;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      main {
+        width: min(100%, 520px);
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 28px;
+        box-shadow: 0 20px 60px rgb(24 32 27 / 10%);
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+        line-height: 1.15;
+        letter-spacing: 0;
+      }
+
+      p {
+        margin: 0 0 24px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      form {
+        display: grid;
+        gap: 16px;
+      }
+
+      label {
+        display: grid;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 650;
+      }
+
+      input {
+        width: 100%;
+        min-height: 46px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 10px 12px;
+        color: var(--ink);
+        font: inherit;
+        font-size: 18px;
+      }
+
+      input:focus {
+        border-color: var(--accent);
+        outline: 3px solid var(--accent-soft);
+      }
+
+      .results {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .result {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px;
+        background: #fbfcfa;
+      }
+
+      .result span {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .result strong {
+        display: block;
+        color: var(--accent);
+        font-size: clamp(28px, 8vw, 42px);
+        line-height: 1;
+        overflow-wrap: anywhere;
+      }
+
+      @media (max-width: 480px) {
+        main {
+          padding: 20px;
+        }
+
+        .results {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>APR Earnings Calculator</h1>
+      <p>Calculated with simple daily interest over 365 days.</p>
+
+      <form>
+        <label>
+          Amount USD
+          <input id="amount" type="number" min="0" step="0.01" value="2000">
+        </label>
+
+        <label>
+          Price
+          <input id="price" type="number" min="0" step="0.01" value="2000">
+        </label>
+
+        <label>
+          APR %
+          <input id="apr" type="number" min="0" step="0.01" value="30">
+        </label>
+
+        <label>
+          Days
+          <input id="days" type="number" min="0" step="1" value="73">
+        </label>
+      </form>
+
+      <section class="results" aria-live="polite">
+        <div class="result">
+          <span>Interest earned</span>
+          <strong id="interest">120</strong>
+        </div>
+
+        <div class="result">
+          <span>Amount / price</span>
+          <strong id="ratio">1</strong>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const amountInput = document.querySelector("#amount");
+      const priceInput = document.querySelector("#price");
+      const aprInput = document.querySelector("#apr");
+      const daysInput = document.querySelector("#days");
+      const interestOutput = document.querySelector("#interest");
+      const ratioOutput = document.querySelector("#ratio");
+
+      function formatNumber(value) {
+        return Number.isInteger(value)
+          ? value.toString()
+          : value.toLocaleString("en-US", { maximumFractionDigits: 2 });
+      }
+
+      function calculate() {
+        const amount = Number(amountInput.value) || 0;
+        const price = Number(priceInput.value) || 0;
+        const apr = (Number(aprInput.value) || 0) / 100;
+        const days = Number(daysInput.value) || 0;
+        const interest = amount * apr * (days / 365);
+        const ratio = price === 0 ? 0 : amount / price;
+
+        interestOutput.textContent = formatNumber(interest);
+        ratioOutput.textContent = formatNumber(ratio);
+      }
+
+      amountInput.addEventListener("input", calculate);
+      priceInput.addEventListener("input", calculate);
+      aprInput.addEventListener("input", calculate);
+      daysInput.addEventListener("input", calculate);
+      calculate();
+    </script>
+  </body>
+</html>
