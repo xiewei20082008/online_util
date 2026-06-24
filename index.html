@@ -184,7 +184,7 @@
         const price = Number(priceInput.value) || 0;
         const apr = (Number(aprInput.value) || 0) / 100;
         const days = Number(daysInput.value) || 0;
-        const interest = amount * apr * (days / 365);
+        const interest = price * apr * (days / 365);
         const ratio = price === 0 ? 0 : amount / price;
 
         interestOutput.textContent = formatNumber(interest);
