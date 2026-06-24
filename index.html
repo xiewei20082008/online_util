@@ -159,6 +159,11 @@
         </div>
 
         <div class="result">
+          <span>Interest per day</span>
+          <strong id="daily-interest">1.64</strong>
+        </div>
+
+        <div class="result">
           <span>Amount / price</span>
           <strong id="ratio">1</strong>
         </div>
@@ -171,6 +176,7 @@
       const aprInput = document.querySelector("#apr");
       const daysInput = document.querySelector("#days");
       const interestOutput = document.querySelector("#interest");
+      const dailyInterestOutput = document.querySelector("#daily-interest");
       const ratioOutput = document.querySelector("#ratio");
 
       function formatNumber(value) {
@@ -185,9 +191,11 @@
         const apr = (Number(aprInput.value) || 0) / 100;
         const days = Number(daysInput.value) || 0;
         const interest = price * apr * (days / 365);
+        const dailyInterest = amount * apr / 365;
         const ratio = price === 0 ? 0 : amount / price;
 
         interestOutput.textContent = formatNumber(interest);
+        dailyInterestOutput.textContent = formatNumber(dailyInterest);
         ratioOutput.textContent = formatNumber(ratio);
       }
 
